@@ -1,5 +1,3 @@
-
-
 #### læse fil
 #### checke for fejl
 #### finde ud af hvad vi gør med fejl
@@ -7,44 +5,53 @@
 #### output format evt JSON
 
 import os
+class Parcer():
+
+    def __init__(self, path, file_name, header = True):
+        self.path = path
+        self.filename = file_name
+        self.header = header
+
+    def reader(self):
+        os.chdir(self.path)
+        file = open(self.filename, mode='r', newline = '\n')
+        self.file = file.read()
+        return self.file
+
+    def new_data_format(self):
+        line_split = self.file.splitlines()
+        file_in_words = []
+        for i in range(len(line_split)):
+            file_in_words.append(line_split[i].split(","))
+
+        array_dict_entry = []
+        for i in range(1, len(file_in_words)):
+            underlying_dict = {}
+            for j in range(len(file_in_words[0])):
+                underlying_dict[file_in_words[0][j]] = file_in_words[i][j]
+            array_dict_entry.append(underlying_dict)    
+        self.new_data = array_dict_entry
+
+    def final(self):
+        self.reader()
+        self.new_data_format()
+        return self.new_data
+
+if __name__ == "__main__":
+    newdata_type = Parcer(r'C:\Users\SPAC-B-16\GLE_Special\Opgaver\Parser', "employees.ascii.csv", header = True).final()
+    print(newdata_type)
 
 
-#### Includes path to folder
-#### Name of csv_file
-#### IF the csv file contain a header or not
+#### TO DO
+#### GØr ting med header
+#### HVad gør vi med fejl
 
-def reader(path, csv_file, header = True):
-    os.chdir(path)
-    if header == True:
-        ### Need to make the first line do something
-        1+1
-
-    else:
-        ###
-        1+1
-    return ### Read file checked for wierd stuff
-
-
-path = r'C:\Users\SPAC-B-16\GLE_Special\Opgaver\Parser'
-os.chdir(path)
-
-file = open("test.csv", mode='r', newline = '\n')
-# print(file.read())
-
-### Make file into nested list with each line being the under
-### underlying list
-file_in_lines = file.read().splitlines()
-file_in_words = []
-for i in range(len(file_in_lines)):
-    file_in_words.append(file_in_lines[i].split(","))
-
-### Creating a nested dictionary
-entry = []
-for i in range(1, len(file_in_words)):
-    under = {}
-    for j in range(len(file_in_words[0])):
-        under[file_in_words[0][j]] = file_in_words[i][j]
-    entry.append(under)
-
-print(entry[0]["name"])
-print(entry[0])
+#### UNIT TEST:
+#### Tom fil
+#### Fil med og uden header
+#### Check at der ikke er hardcoded noget i fohold til index
+#### Hvad gør jeg med "nul" værdier 
+#### Check fil type
+#### Hvad gør jeg med helt fucked documenter
+#### Hvad hvis det ikke er comma sepereret
+#### 
