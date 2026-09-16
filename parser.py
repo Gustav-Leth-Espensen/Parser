@@ -11,11 +11,13 @@ class Parcer():
         self.path = path
         self.filename = file_name
         self.header = header
-
         os.chdir(self.path)
 
     def initial_checks(self):
         self.errormessage = False
+        if not os.path.isfile(self.filename):
+            self.errormessage = "This file does not exist."
+            return
         if not self.filename.lower().endswith(".csv"):
             self.errormessage = "This is not a .csv file"
             return
@@ -24,10 +26,10 @@ class Parcer():
             return
         
 
-
     def reader(self):
-        file = open(self.filename, mode='r', newline = '\n')
+        file = open(self.filename, mode='r', encoding = "utf-8")
         self.file = file.read()
+        return self.file
 
     def new_data_format(self):
         line_split = self.file.splitlines()
@@ -40,7 +42,6 @@ class Parcer():
         for i in range(len(file_in_words)):
             if len(file_in_words[0]) < len(file_in_words[i]):
                 self.errormessage = "This file does not fit the normal csv format."
-                print("testtsetsetsetstet")
                 return
             if len(file_in_words[0]) != len(file_in_words[i]):
                 self.missing_elements.append(i)
@@ -77,7 +78,7 @@ class Parcer():
                 return self.new_data
 
 if __name__ == "__main__":
-    newdata_type = Parcer(r'C:\Users\SPAC-B-16\GLE_Special\Opgaver\Parser\tests', "shorter_rows_h.csv", header = True).final()
+    newdata_type = Parcer(r'C:\Users\SPAC-B-16\GLE_Special\Opgaver\Parser\tests', "wetwetwetw23.csv", header = True).final()
     print(newdata_type)
 
 
@@ -86,12 +87,16 @@ if __name__ == "__main__":
 #### HVad gør vi med fejl
 
 #### UNIT TEST:
+#### Test om filen esksisterer
 #### Tom fil         DONE
 #### Fil med og uden header         DONE
 #### Check at der ikke er hardcoded noget i fohold til index
 #### Hvad gør jeg med "nul" værdier  #### med header gør de dem bare tomme samme uden header
 #### HVad gør jeg med rækker der er for korte   DONE, fortæller hvor der er korte rækker
 #### Check fil type           DONE
-#### Hvad gør jeg med helt fucked documenter
-#### Hvad hvis det ikke er comma sepereret
-#### Find ud af hvad jeg gør med ikke ascii characterer (bl.a. æ, ø og å)
+#### Hvad gør jeg med helt fucked documenter                  Måske done, ikke sikker på hvor fucked de kan være
+#### Hvad hvis det ikke er comma sepereret              #### Alt afhænging af formatet kommer de igennem eller ej, det er svært at overskue alle cases
+#### Find ud af hvad jeg gør med ikke ascii characterer (bl.a. æ, ø og å)  DONE
+#### Lav en split function som finder ud af hvornår den skal splitte ved kommaer og hvornår den ikke skal
+#### Muligvis samme med line split
+
