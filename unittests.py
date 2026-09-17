@@ -49,16 +49,40 @@ class test_parser(unittest.TestCase):
         self.assertEqual(t6.parce("Hej med dig"), [["Hej","med","dig"]])
         self.assertEqual(t6.parce("Hej,med,dig"), [["Hej,med,dig"]])
 
-    def test_line_length(self):
-        t7 = csv_parser.parcer(False, " ")
+    def test_line_length_no_header(self):
+        t7 = csv_parser.parcer(False, ",")
 
-        self.assertEqual(
+        self.assertEqual(t7.parce("Marcus Chen,marcus.chen@example.com,Engineering\nPriya Sharma,priya.sharma@example.com"),
+                        ([["Marcus Chen","marcus.chen@example.com","Engineering"],["Priya Sharma","priya.sharma@example.com"]], 'Missing data in entry: [1]'))
+
+    def test_line_length_with_header(self):
+        t8 = csv_parser.parcer(True, ",")
+
+        # This is what i want
+        # Virker som jeg vil med flere personer, så hvis de er lavet rigtigt fungerer det, spørg Rasmus i morgen hvad han tænker.
+        # self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering"),
+        #                         ([{'name': 'David Kim', 'email': 'Engineering', 'department': ''}], 'Missing data in entry: [1]'))
+
+        #This works
+        # self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering"),
+                #                         ([{'name': 'David Kim', 'email': 'Engineering'}], 'Missing data in entry: [1]'))
+
+        self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"),
+                                ([{'name': 'David Kim', 'email': 'Engineering'}, {'name': 'Jenna', 'email': 'jenna@gmail.com', 'department': 'Staff'}], 'Missing data in entry: [1]'))
+
+    #### THIS IS NOT SUPPOSED TO WORK YET
+    def test_comma_in_quote(self):
+        t9 = csv_parser.parcer(False, ",")
+
+        self.assertEqual(t9.parce("\"James,Simmer\", Staff"),
+                         [["James,Simmer"],["Staff"]])
+
 
 
 if __name__ == '__main__':
-    # unittest.main()
+    unittest.main()
     #### These two does basically the same
-    suite = unittest.TestLoader().loadTestsFromTestCase(test_parser)
-    runner = unittest.TextTestRunner(verbosity=0)
-    result = runner.run(suite)
-    print(f'Tests run: {result.testsRun}')
+    # suite = unittest.TestLoader().loadTestsFromTestCase(test_parser)
+    # runner = unittest.TextTestRunner(verbosity=0)
+    # result = runner.run(suite)
+    # print(f'Tests run: {result.testsRun}')

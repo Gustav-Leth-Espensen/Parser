@@ -39,5 +39,6 @@ class parcer():
 
 if __name__ == "__main__":
     t3 = parcer(True, ",")
-    print(t3.parce("Hej,med,dig \n 1,2,3"))
-    print(t3.parce("name,email,department\nDavid Kim,david.kim@example.com,Engineering"))
+    # print(t3.parce("Hej,med,dig \n 1,2,3"))
+    # print(t3.parce("name,email,department\nDavid Kim,david.kim@example.com,Engineering"))
+    print(t3.parce("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
