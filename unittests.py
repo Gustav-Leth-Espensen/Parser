@@ -70,12 +70,12 @@ class test_parser(unittest.TestCase):
         self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"),
                                 ([{'name': 'David Kim', 'email': 'Engineering'}, {'name': 'Jenna', 'email': 'jenna@gmail.com', 'department': 'Staff'}], 'Missing data in entry: [1]'))
 
-    #### THIS IS NOT SUPPOSED TO WORK YET
+
     def test_comma_in_quote(self):
         t9 = csv_parser.parcer(False, ",")
 
-        self.assertEqual(t9.parce("\"James,Simmer\", Staff"),
-                         [["James,Simmer"],["Staff"]])
+        self.assertEqual(t9.parce("\"James,Simmer\",Staff"),
+                         [["\"James,Simmer\"","Staff"]])
 
 
 
