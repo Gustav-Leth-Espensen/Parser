@@ -1,11 +1,12 @@
 import unittest
 import csv_parser
+import pathlib as pl
 
 
 class test_parser(unittest.TestCase):
 
     def test_non_inputs(self):
-        t4 = csv_parser.parser(True, ",")
+        t4 = csv_parser.parser(True, ",", "\"")
         self.assertEqual(t4.parce(""),"This is an empty string")
         self.assertEqual(t4.parce("hej,med\nmorgen,middag,aften"), 
                          "This file does not fit the normal csv format.")
@@ -59,21 +60,49 @@ class test_parser(unittest.TestCase):
 
     def test_comma_in_quote(self):
         t9 = csv_parser.parser(False, ",")
-
         self.assertEqual(t9.parce("\"James,Simmer\",Staff"),
                          [["\"James,Simmer\"","Staff"]])
         self.assertEqual(t9.parce("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
                          [["\"James,Simmer\"","Staff"],["\'Katy","Kast\' Engineer"]])
-        
-        t9.quotation_sign = "\'"
-        self.assertEqual(t9.parce("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
+
+    def test_different_quotation_signs(self):
+        t10 = csv_parser.parser(False, ",", "\'")
+        self.assertEqual(t10.parce("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
                          ([["\"James","Simmer\"","Staff"],["\'Katy,Kast\' Engineer"]], 'Missing data in entry: [1]'))
 
 
     def test_json(self):
-        t10 = csv_parser.parser(False, ",")
+        t11 = csv_parser.parser(False)
 
-        
+        input = t11.json_converter("Hej,med,dig")
+        expected = '["Hej", "med", "dig"]'
+        self.assertEqual(input,expected)
+
+    def test_jason_header_one_line(self):
+        t12 = csv_parser.parser(True)
+
+        input = t12.json_converter("Hej,med,dig")
+        expected = "Needs at least two lines with header."
+        self.assertEqual(input,expected)
+
+        input1 = t12.create_json_file("Hej,med,dig", "test1")
+        expected1 = "Needs at least two lines with header."
+        self.assertEqual(input1,expected1)
+
+
+    def test_jason_header(self):
+        t13 = csv_parser.parser(True)
+
+        input = t13.json_converter("O\'Brian,med,dig\n1,2,3")
+        expected = '{"O\'Brian": "1", "med": "2", "dig": "3"}'
+        self.assertEqual(input,expected)
+
+    def test_json_file_exists(self):
+        t14 = csv_parser.parser(True)
+
+        t14.create_json_file("O\'Brian,med,dig\n1,2,3", "test14")
+        path = pl.Path("test14.json")
+        self.assertEqual((str(path), path.is_file()), (str(path), True))
 
 if __name__ == '__main__': #pragma: no cover
     unittest.main()
@@ -83,6 +112,7 @@ if __name__ == '__main__': #pragma: no cover
     # result = runner.run(suite)
     # print(f'Tests run: {result.testsRun}')
 
-####    coverage report #### ikke nødvendig
+####    deactive ####går ud af uv
+####    .venv\Scripts\activate ### for at komme ind igen
 ####    coverage html
-####  
+####    coverage run -m unittest discover
