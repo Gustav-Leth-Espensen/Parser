@@ -26,3 +26,4 @@ $RECYCLE.BIN/
 
 # VS-code
 *.pyc
+*.venv
