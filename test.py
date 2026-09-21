@@ -2,7 +2,6 @@ import unittest
 import csv_parser
 import pathlib as pl
 
-
 class test_parser(unittest.TestCase):
 
     def test_non_inputs(self):
@@ -71,17 +70,25 @@ class test_parser(unittest.TestCase):
                          ([["\"James","Simmer\"","Staff"],["\'Katy,Kast\' Engineer"]], 'Missing data in entry: [1]'))
 
 
+    def test_double_quote_inside(self):
+        t11 = csv_parser.parser(False)
+        self.assertEqual(t11.parce("Hej,med"",dig"), [["Hej","med","dig"]])
+
+    def test_new_line_within_quote(self):
+        t12 = csv_parser.parser(False)
+        self.assertEqual(t12.parce("\"Hej\",\"test\ntest\",\"dig\""), [["\"Hej\"","\"test\ntest\"","\"dig\""]])
+
     def test_json(self):
         t11 = csv_parser.parser(False)
 
-        input = t11.json_converter("Hej,med,dig")
+        input = t11._parser__json_converter("Hej,med,dig")
         expected = '["Hej", "med", "dig"]'
         self.assertEqual(input,expected)
 
     def test_jason_header_one_line(self):
         t12 = csv_parser.parser(True)
 
-        input = t12.json_converter("Hej,med,dig")
+        input = t12._parser__json_converter("Hej,med,dig")
         expected = "Needs at least two lines with header."
         self.assertEqual(input,expected)
 
@@ -93,7 +100,7 @@ class test_parser(unittest.TestCase):
     def test_jason_header(self):
         t13 = csv_parser.parser(True)
 
-        input = t13.json_converter("O\'Brian,med,dig\n1,2,3")
+        input = t13._parser__json_converter("O\'Brian,med,dig\n1,2,3")
         expected = '{"O\'Brian": "1", "med": "2", "dig": "3"}'
         self.assertEqual(input,expected)
 
@@ -103,6 +110,7 @@ class test_parser(unittest.TestCase):
         t14.create_json_file("O\'Brian,med,dig\n1,2,3", "test14")
         path = pl.Path("test14.json")
         self.assertEqual((str(path), path.is_file()), (str(path), True))
+        path.unlink()
 
 if __name__ == '__main__': #pragma: no cover
     unittest.main()
