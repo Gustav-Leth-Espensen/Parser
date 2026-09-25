@@ -16,7 +16,7 @@ Unittest dækker 100% af kildekoden. Disse test er blevet lavet ved hjælp af uv
 
 # Getting Started
 ## Dependencies 
-Version Python 3.13.15 \
+Python 3.13.15 \
 coverage 7.16.1
 
 # Executing program
@@ -31,6 +31,6 @@ Gustav Leth-Espensen gustavle@hotmail.com
 
 # Version History
 * 0.1
-- Initial handin
+* * Initial handin
 
 
