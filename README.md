@@ -11,15 +11,15 @@ Programmet er blevet test med 14 unittest fra filen test.py ved hjælp af pakken
 
 Unittest dækker 100% af kildekoden. Disse test er blevet lavet ved hjælp af uv vituel environment og den indbyggede funktion uv coverage.
 
-# UML diagram
+## UML diagram
 ![Activity diagram](https://github.com/Gustav-Leth-Espensen/Parser/blob/main/uml_diagrams/parser_activity_dia.png)
 
 # Getting Started
 ## Dependencies 
 Python 3.13.15 \
-coverage 7.16.1
+coverage>=7.16.1
 
-# Executing program
+## Executing program
 Create an object \
 `example = parser(header = True, seperator = "," = quotation_sign = "\"")` \
 Run the parser \

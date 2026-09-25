@@ -112,7 +112,7 @@ class parser():
 ##### Hvad skal man teste med unit tests, hvor mange, hvad osv.
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # t3 = parser(True, ",")
     # print(t3.parse("Hej,med,dig \n 1,2,3"))
     # print(t3.parse("name,email,department\nDavid Kim,david.kim@example.com,Engineering"))
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     # # print(parser.split_lines("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
     # print(t3.split_words("Hallo,world,\"Goodbye,Universe\""))
     # t3.json_converter("O\'Brian,med,dig\n1,2,3")
-    t4 = parser(False)
+    # t4 = parser(False)
     # print(t3.json_converter("O\'Brian,med,dig", "test1"))
     # t4.json_converter("O\'Brian,med,dig", "test")
     # t4.create_json_file("Hej,med,dig", "test1")
