@@ -26,8 +26,6 @@ class parser():
 
     #### isnewline():
 
-
-    #### Change seperator from , to self.seperator
     def __split_words(self, csv_text: str):
         split_to_words = []
         newword = 0
@@ -44,7 +42,7 @@ class parser():
         return split_to_words
 
 
-    def parce(self, csv_text: str):
+    def parse(self, csv_text: str):
         if csv_text == "":
             return "This is an empty string"
         line_split = self.__split_lines(csv_text)
@@ -81,14 +79,14 @@ class parser():
         #### int/float skal ikke have ""
         #### nul skal ikke have ""
 
-        parced_text = self.parce(csv_file)
-        parced_text_as_str = str(parced_text)
+        parsed_text = self.parse(csv_file)
+        parsed_text_as_str = str(parsed_text)
 
-        if parced_text == "Needs at least two lines with header.":
-            return parced_text
+        if parsed_text == "Needs at least two lines with header.":
+            return parsed_text
 
         json_input = ""
-        for pc, cc, nc, in zip(parced_text_as_str, parced_text_as_str[1:], parced_text_as_str[2:]):
+        for pc, cc, nc, in zip(parsed_text_as_str, parsed_text_as_str[1:], parsed_text_as_str[2:]):
             if cc == "\'" and (pc in ("[", "{", " ", ",") or nc in ("]", "}", ":", " ", ",")):
                 json_input += "\""
             else:
@@ -98,10 +96,15 @@ class parser():
 
     def create_json_file(self, csv_file: str, file_name: str):
         json_format = self.__json_converter(csv_file)
+        print(json_format)
         if json_format == "Needs at least two lines with header.":
             return json_format
         f = open(f"{file_name}.json", "w")
+        f.write("[")
         f.write(json_format)
+        f.write("]")
+        ### I STEDET FOR DET TO ENKELT WRITE STATEMENTS SÅ ÆDNRER DEN I LOOPET DER LAVER JSON FORMATET I __josn_converter
+        
         return
 
 ##### Questions:
@@ -110,17 +113,33 @@ class parser():
 
 
 if __name__ == "__main__":
-    t3 = parser(True, ",")
-    print(t3.parce("Hej,med,dig \n 1,2,3"))
-    print(t3.parce("name,email,department\nDavid Kim,david.kim@example.com,Engineering"))
-    print(t3.parce("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
-    # print(parcer.split_lines("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
-    print(t3.split_words("Hallo,world,\"Goodbye,Universe\""))
-    t3.json_converter("O\'Brian,med,dig\n1,2,3")
+    # t3 = parser(True, ",")
+    # print(t3.parse("Hej,med,dig \n 1,2,3"))
+    # print(t3.parse("name,email,department\nDavid Kim,david.kim@example.com,Engineering"))
+    # print(t3.parse("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
+    # # print(parser.split_lines("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"))
+    # print(t3.split_words("Hallo,world,\"Goodbye,Universe\""))
+    # t3.json_converter("O\'Brian,med,dig\n1,2,3")
     t4 = parser(False)
-    print(t3.json_converter("O\'Brian,med,dig", "test1"))
-    t4.json_converter("O\'Brian,med,dig", "test")
-    t4.create_json_file("Hej,med,dig", "test1")
-    print("Hej med""ig")
+    # print(t3.json_converter("O\'Brian,med,dig", "test1"))
+    # t4.json_converter("O\'Brian,med,dig", "test")
+    # t4.create_json_file("Hej,med,dig", "test1")
+    # print("Hej med""ig")
+
+
+    # example = parser(True, ",", "\"")
+    # print(example.parse("name,email,department\n" \
+    #                     "Marcus Chen,marcus.chen@example.com,Engineering\n" \
+    #                     "Priya Sharma,priya.sharma@example.com,Engineering"))
+
+
+
+
+
+
+    # example.create_json_file(("name,email,department\n" \
+    #                     "Marcus Chen,marcus.chen@example.com,Engineering\n" \
+    #                     "Priya Sharma,priya.sharma@example.com,Engineering"), "example")
+
 
 

@@ -6,77 +6,77 @@ class test_parser(unittest.TestCase):
 
     def test_non_inputs(self):
         t4 = csv_parser.parser(True, ",", "\"")
-        self.assertEqual(t4.parce(""),"This is an empty string")
-        self.assertEqual(t4.parce("hej,med\nmorgen,middag,aften"), 
+        self.assertEqual(t4.parse(""),"This is an empty string")
+        self.assertEqual(t4.parse("hej,med\nmorgen,middag,aften"), 
                          "This file does not fit the normal csv format.")
         
     def test_one_line_no_header(self):
         t1 = csv_parser.parser(False, ",")
-        self.assertEqual(t1.parce("Hej,med,dig"), [["Hej","med","dig"]])
-        self.assertEqual(t1.parce("Hej med dig"), [["Hej med dig"]])
-        self.assertEqual(t1.parce("simpel kinesisk: 汉字,traditionel kinesisk: 漢字"),
+        self.assertEqual(t1.parse("Hej,med,dig"), [["Hej","med","dig"]])
+        self.assertEqual(t1.parse("Hej med dig"), [["Hej med dig"]])
+        self.assertEqual(t1.parse("simpel kinesisk: 汉字,traditionel kinesisk: 漢字"),
                          [["simpel kinesisk: 汉字", "traditionel kinesisk: 漢字"]])
 
     def test_one_line_with_header(self):
         t2 = csv_parser.parser(True, ",")
-        self.assertEqual(t2.parce("Hej,med,dig"), "Needs at least two lines with header.")
-        self.assertEqual(t2.parce("Hej med dig"), "Needs at least two lines with header.")
-        self.assertEqual(t2.parce("simpel kinesisk: 汉字,traditionel kinesisk: 漢字"),
+        self.assertEqual(t2.parse("Hej,med,dig"), "Needs at least two lines with header.")
+        self.assertEqual(t2.parse("Hej med dig"), "Needs at least two lines with header.")
+        self.assertEqual(t2.parse("simpel kinesisk: 汉字,traditionel kinesisk: 漢字"),
                          "Needs at least two lines with header.")
 
     def test_multiple_lines_no_header(self):
         t3 = csv_parser.parser(False, ",")
-        self.assertEqual(t3.parce("Hej,med,dig\nmorgen,middag,aften"), [["Hej","med","dig"],["morgen", "middag", "aften"]])
-        self.assertEqual(t3.parce("Hej med dig\nmorgen middag aften"), [["Hej med dig"],["morgen middag aften"]])
-        self.assertEqual(t3.parce("simpel kinesisk: 汉字\ntraditionel kinesisk: 漢字"),
+        self.assertEqual(t3.parse("Hej,med,dig\nmorgen,middag,aften"), [["Hej","med","dig"],["morgen", "middag", "aften"]])
+        self.assertEqual(t3.parse("Hej med dig\nmorgen middag aften"), [["Hej med dig"],["morgen middag aften"]])
+        self.assertEqual(t3.parse("simpel kinesisk: 汉字\ntraditionel kinesisk: 漢字"),
                          [["simpel kinesisk: 汉字"],["traditionel kinesisk: 漢字"]])
 
     def test_multiple_lines_with_header(self):
         t5 = csv_parser.parser(True, ",")
-        self.assertEqual(t5.parce("name,email,department\nDavid Kim,david.kim@example.com,Engineering"),
+        self.assertEqual(t5.parse("name,email,department\nDavid Kim,david.kim@example.com,Engineering"),
                         [{'name': 'David Kim', 'email': 'david.kim@example.com', 'department': 'Engineering'}])
-        self.assertEqual(t5.parce("name,email,department\nPriya Sharma,,Engineering"),
+        self.assertEqual(t5.parse("name,email,department\nPriya Sharma,,Engineering"),
                         [{'name': 'Priya Sharma', 'email': '', 'department': 'Engineering'}])
 
     def test_different_seperator(self):
         t6 = csv_parser.parser(False, " ")
-        self.assertEqual(t6.parce("Hej med dig"), [["Hej","med","dig"]])
-        self.assertEqual(t6.parce("Hej,med,dig"), [["Hej,med,dig"]])
+        self.assertEqual(t6.parse("Hej med dig"), [["Hej","med","dig"]])
+        self.assertEqual(t6.parse("Hej,med,dig"), [["Hej,med,dig"]])
 
     def test_line_length_no_header(self):
         t7 = csv_parser.parser(False, ",")
-        self.assertEqual(t7.parce("Marcus Chen,marcus.chen@example.com,Engineering\nPriya Sharma,priya.sharma@example.com"),
+        self.assertEqual(t7.parse("Marcus Chen,marcus.chen@example.com,Engineering\nPriya Sharma,priya.sharma@example.com"),
                         ([["Marcus Chen","marcus.chen@example.com","Engineering"],["Priya Sharma","priya.sharma@example.com"]], 'Missing data in entry: [1]'))
 
     def test_line_length_with_header(self):
         t8 = csv_parser.parser(True, ",")
-        self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering"),
+        self.assertEqual(t8.parse("name,email,department\nDavid Kim,Engineering"),
                                   ([{'name': 'David Kim', 'email': 'Engineering'}], 'Missing data in entry: [1]'))
 
-        self.assertEqual(t8.parce("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"),
+        self.assertEqual(t8.parse("name,email,department\nDavid Kim,Engineering\nJenna,jenna@gmail.com,Staff"),
                                 ([{'name': 'David Kim', 'email': 'Engineering'}, {'name': 'Jenna', 'email': 'jenna@gmail.com', 'department': 'Staff'}], 'Missing data in entry: [1]'))
 
 
     def test_comma_in_quote(self):
         t9 = csv_parser.parser(False, ",")
-        self.assertEqual(t9.parce("\"James,Simmer\",Staff"),
+        self.assertEqual(t9.parse("\"James,Simmer\",Staff"),
                          [["\"James,Simmer\"","Staff"]])
-        self.assertEqual(t9.parce("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
+        self.assertEqual(t9.parse("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
                          [["\"James,Simmer\"","Staff"],["\'Katy","Kast\' Engineer"]])
 
     def test_different_quotation_signs(self):
         t10 = csv_parser.parser(False, ",", "\'")
-        self.assertEqual(t10.parce("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
+        self.assertEqual(t10.parse("\"James,Simmer\",Staff\n\'Katy,Kast\' Engineer"),
                          ([["\"James","Simmer\"","Staff"],["\'Katy,Kast\' Engineer"]], 'Missing data in entry: [1]'))
 
 
     def test_double_quote_inside(self):
         t11 = csv_parser.parser(False)
-        self.assertEqual(t11.parce("Hej,med"",dig"), [["Hej","med","dig"]])
+        self.assertEqual(t11.parse("Hej,med"",dig"), [["Hej","med","dig"]])
 
     def test_new_line_within_quote(self):
         t12 = csv_parser.parser(False)
-        self.assertEqual(t12.parce("\"Hej\",\"test\ntest\",\"dig\""), [["\"Hej\"","\"test\ntest\"","\"dig\""]])
+        self.assertEqual(t12.parse("\"Hej\",\"test\ntest\",\"dig\""), [["\"Hej\"","\"test\ntest\"","\"dig\""]])
 
     def test_json(self):
         t11 = csv_parser.parser(False)
