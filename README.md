@@ -22,7 +22,7 @@ coverage 7.16.1
 # Executing program
 Create an object \
 `example = parser(header = True, seperator = "," = quotation_sign = "\"")` \
-run the parser \
+Run the parser \
 `example.create_json_file(("header1,header2,header3\nitem1,item2,item3"), "example")`
 
 
@@ -30,7 +30,7 @@ run the parser \
 Gustav Leth-Espensen gustavle@hotmail.com
 
 # Version History
-*0.1
+* 0.1
 - Initial handin
 
 
